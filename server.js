@@ -1,11 +1,12 @@
-const express = require('express')
-const dotenv = require('dotenv')
-const morgan = require('morgan')
-const colors = require('colors')
-const path = require('path')
-const fileupload = require('express-fileupload')
-const connectDB = require('./config/db')
-const errorHandler = require('./middleware/error')
+const express = require('express');
+const dotenv = require('dotenv');
+const morgan = require('morgan');
+const colors = require('colors');
+const path = require('path');
+const fileupload = require('express-fileupload');
+const cookieParser = require('cookie-parser');
+const connectDB = require('./config/db');
+const errorHandler = require('./middleware/error');
 
 //Load env variables
 dotenv.config({
@@ -16,13 +17,17 @@ dotenv.config({
 connectDB();
 
 //Route Files
+const auth = require('./routes/auth');
 const bootcamps = require('./routes/bootcamps');
 const courses = require('./routes/courses');
 
 const app = express();
 
 //Body Parser
-app.use(express.json())
+app.use(express.json());
+
+// Cookie Parser
+app.use(cookieParser());
 
 //Dev logging middleware
 if (process.env.NODE_ENV === 'development') {
@@ -30,17 +35,18 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 // File Uploading Middleware
-app.use(fileupload())
+app.use(fileupload());
 
 // Set Static Folder
-app.use(express.static(path.join(__dirname, 'public')))
+app.use(express.static(path.join(__dirname, 'public')));
 
 //Mount Routers
+app.use('/api/v1/auth', auth);
 app.use('/api/v1/bootcamps', bootcamps);
-app.use('/api/v1/courses', courses)
+app.use('/api/v1/courses', courses);
 
 //Error Handler Middleware
-app.use(errorHandler)
+app.use(errorHandler);
 
 const PORT = process.env.PORT || 5000;
 
