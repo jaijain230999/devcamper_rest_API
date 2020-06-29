@@ -8,11 +8,12 @@ const {
   deleteCourse
 } = require('../controllers/courses')
 
-//Include Advanced Results Middleware
-const advancedResults = require('../middleware/advancedResults')
 const Course = require('../models/Course')
 
 const router = express.Router({ mergeParams: true })
+
+//Include Advanced Results Middleware
+const advancedResults = require('../middleware/advancedResults')
 
 // Protect Routes Middleware
 const { protect, authorize } = require('../middleware/auth')
