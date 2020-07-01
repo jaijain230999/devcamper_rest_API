@@ -56,7 +56,7 @@ exports.addCourse = asyncHandler(async (req, res, next) => {
 
   // Check if user is the course owner
   if(bootcamp.user.toString() !== req.user.id && req.user.role !== 'admin') {
-    return next(new ErrorResponse(`User ${req.user.id} not Authorized to Add a Course to Bootcamp ${bootcamp._id}`, 401))
+    return next(new ErrorResponse(`User ${req.user.id} not Authorized to Add a Course for Bootcamp ${bootcamp._id}`, 401))
   }
 
   const course = await Course.create(req.body)
